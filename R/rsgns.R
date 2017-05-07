@@ -172,7 +172,7 @@ rsgns <- function(data, param, waitlist, sample=1, decay=TRUE, wait=F, rev=F, ti
 	exp <- rbind(exp, (expt[V(data@network)$name]))
 	}
 	}
-	print(oup)
+	#print(oup)
 	file.remove(inp)
 	file.remove(oup)
 	#print(rns)

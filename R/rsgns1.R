@@ -195,7 +195,7 @@ else{
 
     reactns <- c(unlist(rns[["trans_degradation"]]), rnsxn, unlist(rns[["activation"]]),unlist(rns[["reactions"]]))
     names(reactns) <- c()
-    print(pop)	    
+    #print(pop)	    
     rnstmp <- c("population {",pop,"}","reaction {",reactns,"}", qind)
     if(!is.null(rns$waitlist)){
         rnstmp <- c(rnstmp, rns$waitlist)
