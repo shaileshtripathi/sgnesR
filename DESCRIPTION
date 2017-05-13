@@ -1,13 +1,19 @@
 Package: sgnesR
 Type: Package
 Title: A package for generating data from a network of reactions.
-Version: 1.92
+Version: 0.90.0
 Date: 2017-03-03
 Author: Shailesh tripathi, Frank Emmert-Streib
 Maintainer: Shailesh tripathi <shailesh.tripathy@gmail.com>
 Description: package utilizing SGNSim algorithm for an optimized implementation of the Stochastic Simulation Algorithm.
 LazyLoad: yes
-Depends: R (>= 3.2.0), igraph (>= 0.7.1)
+Depends: R (>= 3.3.0), igraph (>= 0.7.1)
+Imports: grDevices, stats, graphics, utils
 License: GPL (>= 2)
 Packaged: 2016-04-29 13:00:22 UTC; shailesh
 NeedsCompilation: yes
+Suggests: BiocStyle,RUnit,BiocGenerics,Matrix
+biocViews: Sequencing, SequenceMatching, RNASeq, ChIPSeq, DNASeq,
+        WholeGenome, GeneTarget, Alignment, GeneExpression,
+        GeneticVariability, GeneRegulation, Preprocessing,
+        GenomeAnnotation, Software

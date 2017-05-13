@@ -109,7 +109,7 @@ else{
     rns <- NULL
     if(class(data)!="rsgns.reactions"){
         #rns <- getreactions(data, waitlist=waitlist, delay=delay, induce=induce,indpop=indpop)
-        rns <- get_inipop(g,rc,delay=delay,dly.rn=dly.rn, dly.samp=dly.samp[1:3], rn.rate.fn=rn.rate.fn, inhib=inhib, induce=induce, indpop=indpop, formula=T)
+        rns <- .get_inipop(g,rc,delay=delay,dly.rn=dly.rn, dly.samp=dly.samp[1:3], rn.rate.fn=rn.rate.fn, inhib=inhib, induce=induce, indpop=indpop, formula=TRUE)
 	#print(rns)
 	wl <- NULL
     if(!is.null(waitlist)){
@@ -262,7 +262,7 @@ else{
     }			
     #if(class(data)!="rsgns.reactions"){
     #    rns@network <- as.matrix(get.adjacency(data@network))
-    #    rns <- get_inipop(g)
+    #    rns <- .get_inipop(g)
     #}
     cat("\n \n Done.\n \n")
     
@@ -270,7 +270,7 @@ else{
 }
 
 
-inpop <- function(P=NULL, N=NULL,OP=NULL,ind=TRUE, n1=1, n2=1, n3=1, n4=0){
+.inpop <- function(P=NULL, N=NULL,OP=NULL,ind=TRUE, n1=1, n2=1, n3=1, n4=0){
     init <- c()
     pop1 <- pop2 <- tmp <- NULL
     rna <- paste("R",P,sep="")
@@ -325,7 +325,7 @@ inpop <- function(P=NULL, N=NULL,OP=NULL,ind=TRUE, n1=1, n2=1, n3=1, n4=0){
 
 }
 
-get_inipop <- function(g,rc=NULL, delay=F, dly.samp=NULL, dly.rn=NULL, rn.rate.fn=NULL, inhib=NULL, induce=F, indpop=NULL, formula=TRUE){
+.get_inipop <- function(g,rc=NULL, delay=FALSE, dly.samp=NULL, dly.rn=NULL, rn.rate.fn=NULL, inhib=NULL, induce=FALSE, indpop=NULL, formula=TRUE){
     if(is.null(V(g)$name)){
         V(g)$name <- paste("G", c(1:vcount(g)),sep="")
     }
@@ -380,9 +380,9 @@ get_inipop <- function(g,rc=NULL, delay=F, dly.samp=NULL, dly.rn=NULL, rn.rate.f
     bind <- activ <- dgrd <-c()
     rnrfn <- NULL
     for(i in 1:length(nm)){
-        ind <- T
+        ind <- TRUE
         if(dg[i]==0){
-            ind <- F
+            ind <- FALSE
         }
         nb <- neighbors(g,nm[i],mode="in")
         nb <- V(g)$name[nb]
@@ -394,30 +394,30 @@ get_inipop <- function(g,rc=NULL, delay=F, dly.samp=NULL, dly.rn=NULL, rn.rate.f
         xx <- NULL
         #print(ppop[nm[i]])
 	if(is.null(ppop)&&is.null(rpop)){
-        	xx <- inpop(P=nm[i], N=nb,OP=opx)
+        	xx <- .inpop(P=nm[i], N=nb,OP=opx)
 	}
 	if((!is.null(ppop))&&is.null(rpop)){
-        	xx <- inpop(P=nm[i], N=nb,OP=opx, ind=ind, n1=ppop[nm[i]])
+        	xx <- .inpop(P=nm[i], N=nb,OP=opx, ind=ind, n1=ppop[nm[i]])
 	}
 	if((is.null(ppop))&&(!is.null(rpop))){
-        	xx <- inpop(P=nm[i], N=nb,OP=opx, ind=ind, n2=rpop[nm[i]])
+        	xx <- .inpop(P=nm[i], N=nb,OP=opx, ind=ind, n2=rpop[nm[i]])
 	}
 	if((!is.null(ppop))&&(!is.null(rpop))){
-        	xx <- inpop(P=nm[i], N=nb,OP=opx, ind=ind, n1=ppop[nm[i]], n2=rpop[nm[i]])
+        	xx <- .inpop(P=nm[i], N=nb,OP=opx, ind=ind, n1=ppop[nm[i]], n2=rpop[nm[i]])
 	}
         #print(nb) 
-	#xx <- inpop(P=nm[i], N=nb,OP=opx, ind=ind)
+	#xx <- .inpop(P=nm[i], N=nb,OP=opx, ind=ind)
         #print(xx)
 	#print(opx)
 	if(dg[i]!=0){
-         bxx <- conn_bind(xx, rc[4], rc[5], rn.rate.fn1=rnl2, rn.rate.fn2=rnl3, inhib=inh2, formula=formula)
+         bxx <- .conn_bind(xx, rc[4], rc[5], rn.rate.fn1=rnl2, rn.rate.fn2=rnl3, inhib=inh2, formula=formula)
          bind <- c(bind, bxx)
           
-         cxx <- conn_activ(xx,tr=rc[6],dly.rn=dly.rn[1], dly.samp=dly.samp[1], rn.rate.fn=rnl4, inhib=inh3, formula=formula)
+         cxx <- .conn_activ(xx,tr=rc[6],dly.rn=dly.rn[1], dly.samp=dly.samp[1], rn.rate.fn=rnl4, inhib=inh3, formula=formula)
          activ <- c(activ, cxx)
 
         }
-        trxx <- trans_deg(xx, rc[1], rc[2], rc[3], dly.rn= dly.rn[2:3], dly.samp=dly.samp[2:3], rn.rate.fn=rnl1, inhib=inh1, induce=induce, formula=formula)
+        trxx <- .trans_deg(xx, rc[1], rc[2], rc[3], dly.rn= dly.rn[2:3], dly.samp=dly.samp[2:3], rn.rate.fn=rnl1, inhib=inh1, induce=induce, formula=formula)
         #print(trxx)
 	names(trxx) <- c("translation","decayR","decayP")
 	dgrd <- c(dgrd, trxx)
@@ -450,7 +450,7 @@ get_inipop <- function(g,rc=NULL, delay=F, dly.samp=NULL, dly.rn=NULL, rn.rate.f
  	
 }
 
-conn_bind <- function(xx=NULL, br=NULL, ubr=NULL, rn.rate.fn1=NULL, rn.rate.fn2=NULL,inhib=NULL, formula=TRUE){
+.conn_bind <- function(xx=NULL, br=NULL, ubr=NULL, rn.rate.fn1=NULL, rn.rate.fn2=NULL,inhib=NULL, formula=TRUE){
 	in1 <- in2 <- NULL
 	if(length(inhib)<=2){
 
@@ -515,7 +515,7 @@ conn_bind <- function(xx=NULL, br=NULL, ubr=NULL, rn.rate.fn1=NULL, rn.rate.fn2=
     
 }
 
-conn_activ <- function(xx, dly.samp=NULL, dly.rn=NULL, tr=20, rn.rate.fn=NULL, inhib=NULL, formula=TRUE){
+.conn_activ <- function(xx, dly.samp=NULL, dly.rn=NULL, tr=20, rn.rate.fn=NULL, inhib=NULL, formula=TRUE){
    inh1 <- inh2 <- NULL
     if(length(inhib)==1){
      inh1 <- inhib[1]
@@ -607,7 +607,7 @@ for(i in (2^n-1):1){
 ## translation degreation pre gene ###
 
 
-trans_deg <- function(xx, tr=NULL, rdr=NULL, pdr=NULL,dly.rn=NULL, dly.samp=NULL, rn.rate.fn=NULL, inhib=NULL, induce=F, formula=TRUE){
+.trans_deg <- function(xx, tr=NULL, rdr=NULL, pdr=NULL,dly.rn=NULL, dly.samp=NULL, rn.rate.fn=NULL, inhib=NULL, induce=FALSE, formula=TRUE){
     
     rpa <- c()
     ra <- c()

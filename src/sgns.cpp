@@ -28,9 +28,19 @@
 using namespace std;
 
 #include "platform.h"
-#include "lua.hpp"
+//#include "lua.hpp"
 #include "rng.h"
+//////////
+// lua.hpp
+// Lua header files for C++
+// <<extern "C">> not supplied automatically because Lua also compiles as C++
 
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
+//////////
 #define randDouble rand_halfclosed01
 #define randDoubleExc rand_open01
 

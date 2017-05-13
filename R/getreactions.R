@@ -1,4 +1,4 @@
-showlab <- function(verbose=F){
+.showlab <- function(verbose=FALSE){
 if(verbose){
 cat("rnindex: reaction index for substrate and product \n")
 cat("name: Molecule name \n")
@@ -60,7 +60,7 @@ setmolprop <- function(dfobj =NULL,rnindex=NULL,name=NULL,  molcount=NULL, type=
 rc=NULL, delayfn=NULL, delaytime=NULL, pop=NULL){
 	tmp <- .isvnull(rnindex,name,  molcount, type, rrfn, inhib,
 rc, delayfn, delaytime,pop)
-	labx <- showlab()
+	labx <- .showlab()
 	names(tmp) <- labx
 	df <- getrndf()
 	for(i in labx)
@@ -102,7 +102,7 @@ getrndf <- function(){data.frame(rnindex=integer(),
                  stringsAsFactors=FALSE)
 }
 #appendrn <- function(p, name=NULL)
-getreactions<- function(data,   delay=FALSE, induce=F, indpop=NULL, formula=F, waitlist=NULL){
+getreactions<- function(data,   delay=FALSE, induce=FALSE, indpop=NULL, formula=FALSE, waitlist=NULL){
 	xx= NULL
 	if(class(data)=="rsgns.data"){
 		xx <- .getreactionsnet(data, delay=delay, induce=induce, formula=formula, waitlist=waitlist)
@@ -110,12 +110,12 @@ getreactions<- function(data,   delay=FALSE, induce=F, indpop=NULL, formula=F, w
 	if(class(data)=="data.frame"){
 		xx <- .setrn(data)
 		xx$formula<- TRUE
-		xx$waitlist <- wlcheck(waitlist)
+		xx$waitlist <- .wlcheck(waitlist)
 		class(xx) <- "rsgns.reactions"
 	}
 	xx
 }
-  wlcheck <- function(waitlist=NULL){
+  .wlcheck <- function(waitlist=NULL){
 	  wl <- NULL
 	  if(!is.null(waitlist)){
 	
@@ -151,7 +151,7 @@ getreactions<- function(data,   delay=FALSE, induce=F, indpop=NULL, formula=F, w
 	wl
 }
 
-.getreactionsnet <- function(data,   delay=FALSE, induce=F, indpop=NULL, formula=F, waitlist=NULL){
+.getreactionsnet <- function(data,   delay=FALSE, induce=FALSE, indpop=NULL, formula=FALSE, waitlist=NULL){
     wl <- NULL	
     if(class(data)!="rsgns.reactions")
     {
@@ -193,7 +193,7 @@ getreactions<- function(data,   delay=FALSE, induce=F, indpop=NULL, formula=F, w
 #		induce[1] <- rp@stop_time*c(.9)
 #	}
 # 	qind <- paste("queue [", induce[2], "]ind(", induce[1],");", sep="")
-#	induce=T
+#	induce=TRUE
 # } 
 	  
 dly.rn <- data@dly.rn  
@@ -250,7 +250,7 @@ else{
 }
     rns <- NULL
     if(class(data)!="rsgns.reactions"){
-        rns <- get_inipop(g,rc,delay=delay,dly.rn=dly.rn, dly.samp=dly.samp[1:3], rn.rate.fn=rn.rate.fn, inhib=inhib, induce=induce, indpop=indpop, formula=formula)
+        rns <- .get_inipop(g,rc,delay=delay,dly.rn=dly.rn, dly.samp=dly.samp[1:3], rn.rate.fn=rn.rate.fn, inhib=inhib, induce=induce, indpop=indpop, formula=formula)
     	rns$formula <- formula
 	}
     else{

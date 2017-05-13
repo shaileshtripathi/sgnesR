@@ -3,7 +3,7 @@
 \alias{rsgns.rn}
 \title{ Stochastic Gene Networks Simulator }
 \description{
-	Provides an R interface of SGNSim, ‘Stochastic Gene Networks Simulator’ developed by Andre S. Ribeiro1,  and Jason Lloyd-Price.
+	Provides an R interface of SGNSim, 'Stochastic Gene Networks Simulator' developed by Andre S. Ribeiro1,  and Jason Lloyd-Price.
 }
 \usage{
 rsgns.rn(data, param, sample=1, waitlist=NULL, timeseries = TRUE, 
@@ -79,6 +79,8 @@ queue of molecules to be released later.
 	mole: is a numeric vector that describes the number of molecules to be released at a particular time for the  molecules mentioned in the 'nodes' slot.
 	type: is a characte type vector which describes that the waiting molecules is whether "RNA" or "Protein" molecules.	
 }
+	\item{timeseries}{boolean datatype for returning timeseries points or a sample at the end of reaction.}
+	\item{delay}{boolean dataype for icluding delay parameter in the reaction.}
 \item{sample}{
 	is a numeric value to generate the number of samples from a given set of reactions.	
 }

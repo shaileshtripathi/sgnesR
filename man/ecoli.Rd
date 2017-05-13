@@ -10,6 +10,7 @@
 }
 \usage{data("ecoli")}
 \format{
+	igraph object of ecoli network.
 }
 \details{
 	This is a subnetwork of ecoli transcription regulatory network which contains 1692 vertices and 3591 edges. There respective activation and repression of genes can be accessed using E(ecoli)$op. Which provides a vector of +1 and -1. +1 represents the activation and -1 represents supression. 
@@ -28,6 +29,7 @@ Example:
 	#that AcrR supress the expression of acrA.
 
     }
+\value{loads an igraph object}
 \source{
 	http://regulondb.ccg.unam.mx/menu/download/datasets/files/network_tf_gene.txt
 }

@@ -7,7 +7,7 @@
 	it is used for the visualization of  distribution and time series plots for different molecules.
 }
 \usage{
-plot.sgnesR(x, mol = "R", method = c("boxplot", "exp"), gn = NULL, pch = 20, cex = 1, col = "gold", type = "o", lty = 1, ln = F)
+plot.sgnesR(x, mol = "R", method = c("boxplot", "exp"), gn = NULL,ln=F,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,7 +28,10 @@ plot.sgnesR(x, mol = "R", method = c("boxplot", "exp"), gn = NULL, pch = 20, cex
  \item{ln}{
 	this options is used for visualizing logarithmic values of expression profiles
 }
+\item{...}{Other plot parameters.}
+ 
 }
+\value{plots expression profiles.}
 \author{
 	Shailesh Tripathi, Frank Emmert-Streib
 }

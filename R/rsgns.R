@@ -12,7 +12,7 @@ setClass("rsgns.param", slots= c(time = "numeric", stop_time="numeric", readout_
 setClass("rsgns.waitlist", slots= c(nodes="numeric", time = "numeric", mol="numeric", type="character"))
 #setClass("rsgns.reactions", slots= c(reactions="character", decay = "character", population="character", expression="matrix",network="matrix", waitlist="character"))
 
-plot.sgnesR <- function(x,mol="R", method=c("boxplot","exp"), gn=NULL, pch=20, cex=1, col="gold", type="o", lty=1, ln=F, lwd=1){
+plot.sgnesR <- function(x,mol="R", method=c("boxplot","exp"), gn=NULL,ln=FALSE,...){
 		#if(class(x)=="rsgns.reactions"){
 		#	k <- (x@network)
 		#	k <- Matrix::t(k)+k
@@ -37,7 +37,7 @@ plot.sgnesR <- function(x,mol="R", method=c("boxplot","exp"), gn=NULL, pch=20, c
 		}
 		#print(exp)	
 		if(method[1]=="boxplot"){
-			boxplot(t(exp), col=col[1])
+			boxplot(t(exp))
 		}
 		if(method[1]=="exp"){
 				
@@ -60,20 +60,20 @@ plot.sgnesR <- function(x,mol="R", method=c("boxplot","exp"), gn=NULL, pch=20, c
 				lty <- rep(lty, length(nm))
 			}
 			if(length(nm)>1){
-			plot(exp[nm[1], ], type=type, cex=cex, pch=pch, col=col[1], ylim=c(0,max(exp[nm,])), lty=lty[1],lwd=lwd, xlab="Time", ylab="Expression")
+			plot(exp[nm[1], ], xlab="Time", ylab="Expression")
 
 			for(i in 2:length(nm)){
 				lines(exp[nm[i], ], type=type, cex=cex, pch=pch, col=col[i], lwd=lwd, lty=lty[i])
 			}
 			}
 			else{
-			plot(exp[nm[1], ], type=type, cex=cex, pch=pch, col=col[1], ylim=c(0,max(exp[nm,])), lty=lty[1],lwd=lwd, xlab="Time", ylab="Expression")
+			plot(exp[nm[1], ],xlab="Time", ylab="Expression")
 			}
 		}
 
 }
 
-getreactionsx <- function(data, waitlist, decay=TRUE, decayrate=1,  pop=NULL, pop.up=NULL, rev=F, wait=F){
+.getreactionsx <- function(data, waitlist, decay=TRUE, decayrate=1,  pop=NULL, pop.up=NULL, rev=FALSE, wait=FALSE){
 	if(is.null(V(data@network)$name)){
 			V(data@network)$name <- paste("N",c(1:vcount(data@network)),sep="")
 
@@ -116,84 +116,84 @@ getreactionsx <- function(data, waitlist, decay=TRUE, decayrate=1,  pop=NULL, po
 	rnob
 }
 
-rsgns <- function(data, param, waitlist, sample=1, decay=TRUE, wait=F, rev=F, timeseries=T){
-	if(class(data)!="rsgns.reactions")
-	{
-	if(is.null(V(data@network)$name)){
-			V(data@network)$name <- paste("N",c(1:vcount(data@network)),sep="")
-
-	}
-	}	
-	params <- c()
-	rnd <- paste( sample( 0:9, 20, replace=TRUE ), collapse="" )
-	oup <- file.path(".",paste(".rsgns_output",rnd,sep=""))
-	#oup <- "tmp1.txt"
-	savef <- tempfile()
-	savef="tmp2"
-	inp <- file.path(".",paste(".rsgns_input",rnd,sep=""))
-	#inp <- "tmp.txt"
-
-	
-	
-	params <- rbind(params, paste("time", param@time,";"))
-	params <- rbind(params, paste("stop_time ", param@stop_time,";", sep=" ") )
-	params <- rbind(params, paste("readout_interval ", param@readout_interval,";", sep=" ") )
-	params <- rbind(params, paste("output_file ", oup,";", sep="") )
-	#params <- rbind(params, paste("save_interval ", param@save_interval,";", sep=" ") )
-	#params <- rbind(params, paste("save_index ", param@save_index,";", sep=" ") )
-	#params <- rbind(params, paste("save_file ", savef,"_%%.sim;", sep="") )
-	params <- rbind(params, paste("lua!{\n coop = ", param@coop, ";\n}!"))
-	#reactions <- getreactions(data)	
-	#reactions <- rbind(paste("reaction {\n"), reactions)
-	#reactions <- rbind(reactions, "\n }")
-	rns <- NULL
-	if(class(data)!="rsgns.reactions"){
-		rns <- getreactions(data, waitlist, decay=decay, rev=rev, wait=wait)
-	}
-	else{
-		rns <- data
-	}
-	rnstmp <- c( "reaction {",rns@reactions,rns@decay,"}", "population {",rns@population,"}")
-
-	
-   fl <- c(params,rnstmp,rns@waitlist)
-	write.table(fl, file=inp, row.names=FALSE, col.names=FALSE, quote=FALSE)
-    exp <- c()
-    if(timeseries){
-  	    .rsgnscall(inp)
-    	datx=read.table(oup,sep="\t",header=TRUE)
-    	exp=datx[,-(1:4)]
-    }
-    else{
-    for(i in 1:sample){
-    .rsgnscall(inp)
-	datx=read.table(oup,sep="\t",header=TRUE)
-    expt=datx[nrow(datx),-(1:4)]
-	exp <- rbind(exp, (expt[V(data@network)$name]))
-	}
-	}
-	#print(oup)
-	file.remove(inp)
-	file.remove(oup)
-	#print(rns)
-	if(!timeseries){
-	rownames(exp) <- c()
-	}
-	rns@expression <- t(exp)
-	if(class(data)!="rsgns.reactions"){
-		rns@network <- as.matrix(get.adjacency(data@network))
-	}
-	cat("\n \n Done.\n \n")
-	
-	rns
-}
+#rsgns <- function(data, param, waitlist, sample=1, decay=TRUE, wait=FALSE, rev=FALSE, timeseries=TRUE){
+#	if(class(data)!="rsgns.reactions")
+#	{
+#	if(is.null(V(data@network)$name)){
+#			V(data@network)$name <- paste("N",c(1:vcount(data@network)),sep="")
+#
+#	}
+#	}	
+#	params <- c()
+#	rnd <- paste( sample( 0:9, 20, replace=TRUE ), collapse="" )
+#	oup <- file.path(".",paste(".rsgns_output",rnd,sep=""))
+#	#oup <- "tmp1.txt"
+#	savef <- tempfile()
+#	savef="tmp2"
+#	inp <- file.path(".",paste(".rsgns_input",rnd,sep=""))
+#	#inp <- "tmp.txt"
+#
+#	
+#	
+#	params <- rbind(params, paste("time", param@time,";"))
+#	params <- rbind(params, paste("stop_time ", param@stop_time,";", sep=" ") )
+#	params <- rbind(params, paste("readout_interval ", param@readout_interval,";", sep=" ") )
+#	params <- rbind(params, paste("output_file ", oup,";", sep="") )
+#	#params <- rbind(params, paste("save_interval ", param@save_interval,";", sep=" ") )
+#	#params <- rbind(params, paste("save_index ", param@save_index,";", sep=" ") )
+#	#params <- rbind(params, paste("save_file ", savef,"_%%.sim;", sep="") )
+#	params <- rbind(params, paste("lua!{\n coop = ", param@coop, ";\n}!"))
+#	#reactions <- getreactions(data)	
+#	#reactions <- rbind(paste("reaction {\n"), reactions)
+#	#reactions <- rbind(reactions, "\n }")
+#	rns <- NULL
+#	if(class(data)!="rsgns.reactions"){
+#		rns <- getreactions(data, waitlist, decay=decay, rev=rev, wait=wait)
+#	}
+#	else{
+#		rns <- data
+#	}
+#	rnstmp <- c( "reaction {",rns@reactions,rns@decay,"}", "population {",rns@population,"}")
+#
+#	
+#  fl <- c(params,rnstmp,rns@waitlist)
+#	write.table(fl, file=inp, row.names=FALSE, col.names=FALSE, quote=FALSE)
+#    exp <- c()
+#    if(timeseries){
+#  	    .rsgnscall(inp)
+#    	datx=read.table(oup,sep="\t",header=TRUE)
+#    	exp=datx[,-(1:4)]
+#    }
+#    else{
+#    for(i in 1:sample){
+#    .rsgnscall(inp)
+#	datx=read.table(oup,sep="\t",header=TRUE)
+#    expt=datx[nrow(datx),-(1:4)]
+#	exp <- rbind(exp, (expt[V(data@network)$name]))
+#	}
+#	}
+#	#print(oup)
+#	file.remove(inp)
+#	file.remove(oup)
+#	#print(rns)
+#	if(!timeseries){
+#	rownames(exp) <- c()
+#	}
+#	rns@expression <- t(exp)
+#	if(class(data)!="rsgns.reactions"){
+#		rns@network <- as.matrix(get.adjacency(data@network))
+#	}
+#	cat("\n \n Done.\n \n")
+#	
+#	rns
+#}
 #prepare data
 #library(igraph)
-#g <- barabasi.game(20, directed=F)
+#g <- barabasi.game(20, directed=FALSE)
 #rsg <- new("rsgns.data",network=g, rconst=25, inhib=c(rep("*",vcount(g))), rn.rate.function=list("invhill", c(10,2)))
 #rp <- new("rsgns.param", time=1, stop_time=100, readout_interval=10, save_interval=200, save_index=5,coop=10)
 #rwl <- new("rsgns.waitlist",nodes=sample(vcount(g),8), time=sample(rp@stop_time,8), mol=20) 
-#xx <- rsgns(rsg, rp, rwl, wait=T,sample=20)
+#xx <- rsgns(rsg, rp, rwl, wait=TRUE,sample=20)
 
 ##############################################################
 
@@ -203,7 +203,7 @@ rsgns <- function(data, param, waitlist, sample=1, decay=TRUE, wait=F, rev=F, ti
 .rsgnscall <- function(inp=NULL){
 	if(!is.null(inp)){
 		tmp <- c("--include", inp, "--progress")
-		k <- .Call("getArgs", as.numeric(length(tmp)), tmp)
+		k <- .Call("getArgs", as.numeric(length(tmp)), tmp, PACKAGE = "sgnesR")
 		
 	}
 }

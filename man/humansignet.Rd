@@ -9,7 +9,8 @@
 	A user can use different igraph functions to access different features of the network.
 }
 \usage{data("humansignet")}
-\format{
+\format{	
+	igraph object of human signalling network.
 }
 \details{
 	This is a subnetwork of human signalling network which contains 325 vertices and 1194 edges. There respective activation and repression of genes can be accessed using E(humansignet)$op. Which provides a vector of +1 and -1. +1 represents the activation and -1 represents supression. 
@@ -28,6 +29,7 @@ Example:
 	# +1 shows that AcrR activates the expression of acrA.
 
     }
+\value{loads an igraph object}
 \source{
 	http://chenglongli.cn/people/EdwinWang/index.html
 }
