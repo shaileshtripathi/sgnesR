@@ -7,10 +7,11 @@
 #include<stdio.h>
 using namespace std;
 #include "sgns.h"
-////////////////////////////
-//int main (int argc, char *argv[]){
+//////////////////////////////////////////
+//int main (int argc, char *argv[]){     
 //	int p = mainxx(argc-1, &argv[1]);
 //}
+///////////////////////////////////////////
 extern "C" {
 
 	SEXP getArgs(SEXP myint, SEXP mychar){

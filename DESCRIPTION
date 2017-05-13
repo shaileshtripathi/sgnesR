@@ -1,7 +1,7 @@
 Package: sgnesR
 Type: Package
 Title: A package for generating data from a network of reactions.
-Version: 0.90.0
+Version: 0.91.0
 Date: 2017-03-03
 Author: Shailesh tripathi, Frank Emmert-Streib
 Maintainer: Shailesh tripathi <shailesh.tripathy@gmail.com>
