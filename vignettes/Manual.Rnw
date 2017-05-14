@@ -106,7 +106,7 @@ In the following, we demonstrate briefly the usage of the sgnesR package and the
 @
  
 
-\section{Quick start}
+\section{Generting expression from a set of reactions}
 Suppose the equations are described as follows
 	\begin{enumerate}
 	\item ProA + *Ind --[0.002]--$>$ A + ProA
