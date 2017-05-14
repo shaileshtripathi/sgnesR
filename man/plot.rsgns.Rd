@@ -7,7 +7,7 @@
 	it is used for the visualization of  distribution and time series plots for different molecules.
 }
 \usage{
-plot.sgnesR(x, mol = "R", method = c("boxplot", "exp"), gn = NULL,ln=F,...)
+plot.sgnesR(x, mol = "R", method = c("boxplot", "exp"), gn = NULL,ln=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

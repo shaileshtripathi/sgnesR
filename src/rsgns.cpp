@@ -2,6 +2,7 @@
 #include <R.h>
 #include <Rdefines.h>
 #include <R_ext/Utils.h>
+#include <R_ext/Rdynload.h>
 //#include <Rinternals.h>
 //#include <Rinterface.h>
 #include<stdio.h>
@@ -34,6 +35,15 @@ extern "C" {
 	return(R_NilValue);
 
 	}
+R_CallMethodDef callMethods[]  = {
+  {"getArgs", (DL_FUNC) &getArgs, 2},
+  {NULL, NULL, 0}
+};
+void R_init_sgnesR(DllInfo *info)
+{
+   R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+}
+
 
 
 }

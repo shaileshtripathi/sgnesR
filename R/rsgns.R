@@ -203,7 +203,7 @@ plot.sgnesR <- function(x,mol="R", method=c("boxplot","exp"), gn=NULL,ln=FALSE,.
 .rsgnscall <- function(inp=NULL){
 	if(!is.null(inp)){
 		tmp <- c("--include", inp, "--progress")
-		k <- .Call("getArgs", as.numeric(length(tmp)), tmp, PACKAGE = "sgnesR")
+		k <- .Call("getArgs", as.numeric(length(tmp)), tmp)
 		
 	}
 }

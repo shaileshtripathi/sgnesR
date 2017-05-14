@@ -8,7 +8,7 @@
 'initial population', 'activation', 'binding unbinding', and 'transcription and degradation' reactions of a given gene networks. 
 }
 \usage{
-getreactions(data, delay = FALSE, induce = F, indpop = NULL, formula = F, waitlist = NULL)
+getreactions(data, delay = FALSE, induce = FALSE, indpop = NULL, formula = FALSE, waitlist = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
